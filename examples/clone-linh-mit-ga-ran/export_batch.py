@@ -2,19 +2,14 @@
 # -*- coding: utf-8 -*-
 """
 Script tự động kết xuất trọn bộ 5 File Word (.docx) chuyên dụng cho sản xuất hàng loạt
-Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại (Clone Video 1 Linh Mít Daily)
+Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại (Clone Linh Mít Video 1)
 Skill: han-daily-family-vlog
+Khung phân cảnh: Chuẩn 2 phân cảnh x 10.0s = 20.0s cho Google Veo 3.1 & Muse
 1. 00_HO_SO_THAM_CHIEU_GOC.docx
 2. 01_PROMPTS_ANH_HANG_LOAT.docx
 3. 02_PROMPTS_VIDEO_HANG_LOAT.docx
 4. 03_PROMPTS_VOICE_HANG_LOAT.docx
 5. 04_METADATA_SEO.docx
-
-Quy chuẩn Tool Batch:
-- 100% văn bản thuần túy (Plain Text Paragraphs), KHÔNG sử dụng Table ở bất kỳ file nào.
-- 01_PROMPTS_ANH: Mỗi cảnh là đúng 1 đoạn văn liên tục (1 cảnh = 1 đoạn văn sạch).
-- 02_PROMPTS_VIDEO: Mỗi cảnh là đúng 1 đoạn văn liên tục không ngắt dòng bên trong (1 cảnh = 1 đoạn văn sạch).
-- 03_PROMPTS_VOICE: Lời thoại sạch 100% Giọng Miền Nam, không kèm tên cảnh, không nhãn người nói, không kèm chú thích SFX (1 cảnh = 1 đoạn văn sạch).
 """
 
 import os
@@ -37,7 +32,7 @@ def add_styled_title(doc, title_text, subtitle_text, note_text=None):
     run_title.font.name = 'Segoe UI'
     run_title.font.size = Pt(17)
     run_title.font.bold = True
-    run_title.font.color.rgb = RGBColor(234, 88, 12) # Orange
+    run_title.font.color.rgb = RGBColor(234, 88, 12) # Warm Orange Family
     p_title.paragraph_format.space_before = Pt(0)
     p_title.paragraph_format.space_after = Pt(2)
 
@@ -76,40 +71,23 @@ def add_clean_paragraph(doc, text_content, font_name='Consolas', font_size=10, i
 def export_file_00(output_dir):
     doc = Document()
     add_styled_title(doc, "HỒ SƠ THAM CHIẾU GỐC (MASTER REFERENCE ASSETS)",
-                     "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại (Clone Video 1 Linh Mít Daily)",
-                     "⚠️ BƯỚC 0 BẮT BUỘC: Nạp ảnh Turnaround của các nhân vật tham gia làm Character Reference cho Tool AI.")
+                     "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại • 3 Nhân Vật & Nhà Hàng",
+                     "⚠️ BƯỚC 0 BẮT BUỘC: Nạp ảnh Turnaround làm Character Reference cho Tool AI tạo ảnh/video.")
 
     p_h1 = doc.add_heading(level=2)
-    p_h1.add_run("1. Master Character Model Sheet Bé Hân (Chị cả 3 tuổi) @_Brand_Baby_Lead")
-    p_c1 = doc.add_paragraph()
-    p_c1.add_run("• Tên: ").bold = True
-    p_c1.add_run("Bé Hân @_Brand_Baby_Lead (3 tuổi, má bánh bao phúng phính, mắt to tròn, tóc búi củ tỏi kẹp hoa cúc ngọc trai).\n")
-    p_c1.add_run("• Trang phục tập này: ").bold = True
-    p_c1.add_run("Váy dệt kim be cổ bèo, áo cardigan xanh navy viền trắng nơ ngực, vớ trắng ngắn.")
-    p_c1.paragraph_format.space_after = Pt(4)
-
-    prompt_han = "Character turnaround model sheet of an exceptionally cute 3-year-old Vietnamese toddler girl (Bé Hân), arranged side-by-side on a wide 16:9 seamless warm studio canvas. On the left and center: three full-body views showing her toddler proportions, chubby rosy dumpling cheeks, dressed in a charming cream knitted dress under navy blue cardigan with white collar, wearing tiny pearl daisy hairpin. These views include front, three-quarter, and profile standing views with strictly two clean chubby legs. On the right side: ultra-detailed close-up facial beauty portrait showing her iconic pouty face, puffed dumpling cheeks, and hilarious side-eye glare. 100% real human toddler photography, authentic unretouched raw 8k DSLR on Sony A7R V with 85mm f/1.4 lens, natural baby skin texture with microscopic pores, zero CGI, zero 3D render --ar 16:9 --style raw"
-    add_clean_paragraph(doc, prompt_han)
+    p_h1.add_run("1. Master Toddler Model Sheet @_Brand_Baby_Lead (Bé Hân)")
+    prompt_baby = "A professional four-view character turnaround model sheet of @_Brand_Baby_Lead, an authentic 3-year-old Vietnamese toddler girl, displaying front view, three-quarter view, profile side view, and close-up dramatic sulking pout expression with puffed dumpling cheeks and sideways side-eye glare. Super adorable chubby cheeks, expressive dark eyes, topknot bun with pearl daisy hairpin, natural toddler skin with delicate pores. Wearing cream knit dress and navy blue cardigan with white collar, 5-finger hands. Soft daylight, neutral studio background, raw DSLR photography --ar 16:9 --style raw"
+    add_clean_paragraph(doc, prompt_baby)
 
     p_h2 = doc.add_heading(level=2)
-    p_h2.add_run("2. Master Character Sheet Ba Hoàng Long (27 tuổi) @_Brand_Father_Lead")
-    p_c2 = doc.add_paragraph()
-    p_c2.add_run("• Tên: ").bold = True
-    p_c2.add_run("Ba Hoàng Long @_Brand_Father_Lead (27 tuổi, kính ngố tròn gọng đen, áo thun tay dài xanh rêu olive, tính hài hước).")
-    p_c2.paragraph_format.space_after = Pt(4)
-
-    prompt_ba = "Character turnaround model sheet of a handsome, stylish 27-year-old Vietnamese father (Ba Hoàng Long), arranged side-by-side on a wide 16:9 seamless modern studio backdrop. Three full-body views showing his tall frame dressed in olive-green long-sleeve tee, dark jeans, and clean sneakers. On the right side: close-up facial portrait showing his handsome gentle features, stylish modern round black-rimmed glasses, friendly laughing eyes, and playful charismatic smile. 100% real human, raw 8k DSLR photography on Sony A7R V, zero CGI, zero 3D render --ar 16:9 --style raw"
-    add_clean_paragraph(doc, prompt_ba)
+    p_h2.add_run("2. Master Father Model Sheet @_Brand_Father_Lead (Ba Hoàng Long)")
+    prompt_dad = "A professional turnaround model sheet of @_Brand_Father_Lead, a 27-year-old Vietnamese young father, round black glasses, olive sweater, warm playful smile, real human skin pores, Sony A7 IV photography --ar 16:9 --style raw"
+    add_clean_paragraph(doc, prompt_dad)
 
     p_h3 = doc.add_heading(level=2)
-    p_h3.add_run("3. Master Character Sheet Mẹ Uyên Hân (25 tuổi) @_Brand_Mother_Lead")
-    p_c3 = doc.add_paragraph()
-    p_c3.add_run("• Tên: ").bold = True
-    p_c3.add_run("Mẹ Uyên Hân @_Brand_Mother_Lead (25 tuổi, thanh tú, tóc đen dài gợn sóng, áo dệt kim cổ bẻ polo xanh navy viền trắng).")
-    p_c3.paragraph_format.space_after = Pt(4)
-
-    prompt_me = "Character turnaround model sheet of an exceptionally beautiful 25-year-old Vietnamese mother (Uyên Hân), arranged side-by-side on a wide 16:9 seamless minimalist grey studio cyclorama. Three full-body views showing her slender figure wearing navy knit polo top with white collar. On the right side: close-up portrait showing delicate oval face, fair luminous skin, captivating dark eyes, and radiant warm smile. 100% real human raw 8k DSLR photography, natural skin pores, zero CGI, zero 3D render --ar 16:9 --style raw"
-    add_clean_paragraph(doc, prompt_me)
+    p_h3.add_run("3. Master Mother Model Sheet @_Brand_Mother_Lead (Mẹ Uyên Hân)")
+    prompt_mom = "A professional turnaround model sheet of @_Brand_Mother_Lead, a 25-year-old Vietnamese stylish mother, dark wavy hair, navy knit top, natural gentle beauty, raw photography --ar 16:9 --style raw"
+    add_clean_paragraph(doc, prompt_mom)
 
     p_h4 = doc.add_heading(level=2)
     p_h4.add_run("4. Master Location Sheet @_Location_Restaurant_Dining")
@@ -122,10 +100,11 @@ def export_file_01(output_dir):
     doc = Document()
     add_styled_title(doc, "PROMPTS TẠO ẢNH HÀNG LOẠT (BATCH IMAGE PROMPTS)",
                      "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại • Chuẩn 9:16 Real Human Photography",
-                     "Định dạng Tool Batch: 100% văn bản thuần túy không nhãn thừa. Mỗi cảnh là đúng 1 đoạn văn liên tục xuống dòng (1 cảnh = đúng 1 đoạn văn sạch).")
+                     "Định dạng Tool Batch: 100% văn bản thuần túy không nhãn thừa. Mỗi cảnh là đúng 1 đoạn văn liên tục xuống dòng (2 cảnh = đúng 2 đoạn văn sạch).")
 
     prompts = [
-        "Authentic raw 8k DSLR candid photograph of a super cute 3-year-old Vietnamese girl (Bé Hân) with chubby rosy dumpling cheeks and high bun with pearl daisy hairpin, sitting in the center of a dining table between her stylish mother in navy knit top and handsome father wearing round black glasses in olive shirt. On the white marble table is a plate of crispy golden popcorn chicken. The toddler has an iconic hilarious dramatic sulking face with puffed dumpling cheeks, exaggerated lower lip pouting downward, and eyes giving an epic sideways side-eye glare at her smiling father, natural child skin pores, warm restaurant indoor lighting, 9:16 vertical ratio, shot on Sony A7R V with 85mm f/1.4 lens, ultra photorealistic, zero CGI, zero plastic skin --ar 9:16 --v 6.1 --style raw"
+        "Authentic raw 8k DSLR candid photograph of a super cute 3-year-old Vietnamese girl (Bé Hân) with chubby rosy dumpling cheeks and high bun with pearl daisy hairpin, sitting in the center of a dining table between her stylish mother in navy knit top and handsome father wearing round black glasses in olive shirt. On the white marble table is a plate of crispy golden popcorn chicken. The toddler has an iconic hilarious dramatic sulking face with puffed dumpling cheeks, exaggerated lower lip pouting downward, and eyes giving an epic sideways side-eye glare at her smiling father, natural child skin pores, warm restaurant indoor lighting, 9:16 vertical ratio, shot on Sony A7R V with 85mm f/1.4 lens, ultra photorealistic, zero CGI, zero plastic skin --ar 9:16 --v 6.1 --style raw",
+        "Authentic raw 8k DSLR candid photograph of Bé Hân turning toward her laughing mother with dramatic teary pouting face and crossed tiny arms, complaining about her stolen chicken nugget, while father chuckles playfully in background, cozy restaurant atmosphere, crystal-sharp baby facial texture, realistic child tears on rosy cheeks, Sony A7R V, 85mm f/1.4, raw photography --ar 9:16 --v 6.1 --style raw"
     ]
     for p in prompts:
         add_clean_paragraph(doc, p)
@@ -134,11 +113,12 @@ def export_file_01(output_dir):
 def export_file_02(output_dir):
     doc = Document()
     add_styled_title(doc, "PROMPTS TẠO VIDEO HÀNG LOẠT (BATCH MEGA PROMPTS)",
-                     "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại • Chuẩn Tagged Blocks Bắt Buộc 1:1",
-                     "Định dạng Tool Batch: 100% văn bản thuần túy không nhãn thừa. Mỗi cảnh là đúng 1 đoạn văn liên tục không ngắt dòng bên trong (1 cảnh = đúng 1 đoạn văn sạch).")
+                     "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại • Chuẩn Khung 10.0s Cho Google Veo 3.1 & Muse",
+                     "Định dạng Tool Batch: 100% văn bản thuần túy không nhãn thừa. Mỗi cảnh là đúng 1 đoạn văn liên tục không ngắt dòng bên trong (2 cảnh = đúng 2 đoạn văn sạch).")
 
     video_prompts = [
-        "[SPECIFICATION]: Exactly 15.0 seconds, 9:16 vertical 1080x1920, 30 FPS, authentic candid family snapshot, unretouched real human photography, zero AI plastic look, zero CGI rendering. [CAMERA LOCK & FRAMING]: Locked-off eye-level medium shot framing all three family members around the dining table, stationary tripod-mounted camera. Continuous unbroken single-take video throughout all 15.0 seconds with zero camera movement, no zoom, no pan, strictly no scene cut. [FAMILY CHARACTER ANCHORS]: Center: @_Brand_Baby_Lead (super cute 3-year-old Vietnamese girl, chubby rosy dumpling cheeks, expressive dark brown eyes, high topknot bun with pearl daisy hairpin, authentic soft baby skin with natural micro-pores). Left: @_Brand_Mother_Lead (25-year-old stylish mother with long wavy dark hair, elegant fair complexion). Right: @_Brand_Father_Lead (27-year-old handsome father with round black-rimmed glasses, playful smile). [DYNAMIC OUTFITS]: @_Brand_Baby_Lead wearing cream knitted dress and navy blue cardigan with white collar, mother wearing navy knit polo top with white collar, father wearing olive-green long-sleeve tee, clean anatomically perfect 5-finger hands. [ENVIRONMENT & LIGHTING]: Positioned in @_Location_Restaurant_Dining, white marble dining table with plate of crispy golden popcorn chicken in foreground, cozy restaurant background with warm ambient ceiling spotlights, natural soft contact shadows. [INITIAL STATE]: Toddler sitting in highchair between parents, mouth wide open awaiting food, blowing gently with tiny puckered lips, eyes sparkling with innocent anticipation. [COMEDY SKIT & REACTION TIMELINE]: - [0.0s - 3.5s]: Father holds stainless steel fork with a piece of crispy chicken extending toward toddler's mouth, toddler opens mouth wide blowing innocently with puffed cheeks. - [3.5s - 6.5s]: Sudden comedic twist, father smoothly pivots the fork left directly into mother's mouth, mother bites the chicken happily and chews with joyful satisfaction. - [6.5s - 11.5s]: Iconic comedic reaction sequence, toddler freezes completely with mouth still wide open in disbelief for 2 seconds, mouth slowly closes, dumpling cheeks puff up dramatically like steamed buns, exaggerated lower lip pouts downward in immense grievance, eyes shift sideways into an epic hilarious side-eye glare at father without moving her head. - [11.5s - 15.0s]: Toddler turns her head to mother with teary pouty baby scolding gestures, while father and mother burst into uncontrollable genuine contagious laughter, father reaching to gently pat toddler's head. [AUDIO DIALOGUE & BABY LIP-SYNC]: Exact synchronized spoken Southern Vietnamese dialogue: Father (0-3s): \"Nguội rồi nè, há miệng to ba đút cho công chúa nhen!\", Mother (4-6s): \"Ưm ngon quá ba ơi!\", Toddler (11-15s ngọng líu dỗi hờn): \"Mẹ kì zậy... con thổi nguội gòi mà mẹ ăn hết trơn!\", Father and Mother: (bursting into authentic uncontrollable laughter). [AUDIO BGM & COMEDY SFX]: Cartoon crow caw sfx during freeze, cartoon spring boing sfx when cheeks puff out, warm authentic parents laughter, soft cheerful acoustic ukulele bed at -22dB. [FINAL STATE]: Toddler maintaining adorable dramatic pout, parents laughing warmly together. [NEGATIVE CONSTRAINTS]: Strictly NO extra fingers, NO fused hands, NO distorted baby limbs, NO waxy plastic doll face, NO 3D Pixar anime look, NO text overlays, NO watermarks."
+        "[SPECIFICATION]: Exactly 10.0 seconds, 9:16 vertical 1080x1920, 30 FPS, authentic candid family snapshot, unretouched real human photography, zero AI plastic look, zero CGI rendering. [CAMERA LOCK & FRAMING]: Locked-off eye-level medium shot framing all three family members around the dining table, stationary tripod-mounted camera. Continuous unbroken single-take video throughout all 10.0 seconds with zero camera movement, no zoom, no pan, strictly no scene cut. [FAMILY CHARACTER ANCHORS]: Center: @_Brand_Baby_Lead (super cute 3-year-old Vietnamese girl, chubby rosy dumpling cheeks, expressive dark brown eyes, high topknot bun with pearl daisy hairpin, authentic soft baby skin with natural micro-pores). Left: @_Brand_Mother_Lead (25-year-old stylish mother with long wavy dark hair, elegant fair complexion). Right: @_Brand_Father_Lead (27-year-old handsome father with round black-rimmed glasses, playful smile). [DYNAMIC OUTFITS]: @_Brand_Baby_Lead wearing cream knitted dress and navy blue cardigan with white collar, mother wearing navy knit polo top with white collar, father wearing olive-green long-sleeve tee, clean anatomically perfect 5-finger hands. [ENVIRONMENT & LIGHTING]: Positioned in @_Location_Restaurant_Dining, white marble dining table with plate of crispy golden popcorn chicken in foreground, cozy restaurant background with warm ambient ceiling spotlights, natural soft contact shadows. [INITIAL STATE]: Toddler sitting in highchair between parents, mouth wide open awaiting food, blowing gently with tiny puckered lips, eyes sparkling with innocent anticipation. [COMEDY SKIT & REACTION TIMELINE]: - [0.0s - 3.0s]: Father holds stainless steel fork with a piece of crispy chicken extending toward toddler's mouth, toddler opens mouth wide blowing innocently with puffed cheeks. - [3.0s - 7.0s]: Sudden comedic twist, father smoothly pivots the fork left directly into mother's mouth, mother bites the chicken happily and chews with joyful satisfaction; toddler freezes completely with mouth still wide open in disbelief. - [7.0s - 10.0s]: Dumpling cheeks slowly puff up like steamed buns, exaggerated lower lip pouts downward in immense grievance, eyes shift sideways into an epic hilarious side-eye glare at father without moving her head, settling into Keyframe K2. [AUDIO DIALOGUE & BABY LIP-SYNC]: Father (0-3s): \"Nguội rồi nè, há miệng to ba đút cho công chúa nhen!\", Mother (4-6s): \"Ưm giòn ngon quá ba ơi!\", cartoon crow caw SFX during freeze, funny spring boing SFX as cheeks puff out. [FINAL STATE]: Toddler maintaining iconic frozen side-eye glare, parents holding satisfied chuckles, matching Keyframe K2. [NEGATIVE CONSTRAINTS]: Strictly NO extra fingers, NO fused hands, NO distorted baby limbs, NO waxy plastic doll face, NO 3D Pixar anime look, NO text overlays, NO watermarks.",
+        "[SPECIFICATION]: Exactly 10.0 seconds, 9:16 vertical 1080x1920, 30 FPS, candid emotional toddler comedy, unretouched real human photography, zero AI plastic look. [CAMERA LOCK & FRAMING]: Locked-off medium close-up shot focused on Bé Hân, father and mother visible on both sides smiling warmly, perfectly stabilized stationary camera. Continuous unbroken single take. [FAMILY CHARACTER ANCHORS]: @_Brand_Baby_Lead in sharp focus with puffed rosy dumpling cheeks and misty expressive eyes; @_Brand_Mother_Lead and @_Brand_Father_Lead interacting lovingly. [DYNAMIC OUTFITS]: Identical outfits: cream knit dress with blue cardigan, navy knit top, olive long-sleeve tee, clean 5 fingers. [ENVIRONMENT & LIGHTING]: Restaurant dining setting @_Location_Restaurant_Dining, warm indoor lighting, plate of golden chicken on marble table. [INITIAL STATE]: Seamlessly inherits Keyframe K2: toddler in dramatic sideways glare, puffed dumpling cheeks. [COMEDY SKIT & REACTION TIMELINE]: - [0.0s - 3.0s]: Toddler slowly breaks her frozen glare, turning her head toward mother with exaggerated pouting lips and teary indignant eyes, pointing tiny finger at empty fork. - [3.0s - 7.0s]: Delivers her hilarious baby scolding line with pouting baby lip-sync: \"Mẹ kì zậy... con thổi nguội gòi mà mẹ ăn hết trơn!\", crossing tiny arms in theatrical grievance. - [7.0s - 10.0s]: Father and mother burst into uncontrollable genuine contagious laughter, father reaching out to gently pat toddler's head while mother hugs her lovingly to comfort her. [AUDIO DIALOGUE & BABY LIP-SYNC]: Toddler (3-7s ngọng líu dỗi hờn): \"Mẹ kì zậy... con thổi nguội gòi mà mẹ ăn hết trơn!\", Father and Mother (7-10s): (bursting into authentic warm contagious laughter), cheerful acoustic ukulele bed at -22dB. [FINAL STATE]: Toddler nestled in mother's arms while parents laugh warmly, completing the video loop. [NEGATIVE CONSTRAINTS]: Strictly NO extra fingers, NO morphing eyes, NO AI plastic skin, NO 3D cartoon style, NO watermarks."
     ]
     for vp in video_prompts:
         add_clean_paragraph(doc, vp)
@@ -147,11 +127,12 @@ def export_file_02(output_dir):
 def export_file_03(output_dir):
     doc = Document()
     add_styled_title(doc, "KỊCH BẢN LỜI THOẠI HÀNG LOẠT (BATCH TTS SCRIPTS)",
-                     "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại • 100% Giọng Miền Nam",
-                     "Định dạng Tool Batch: Lời thoại tiếng Việt sạch 100%, không nhãn người nói, không chú thích SFX. Mỗi cảnh là đúng 1 đoạn văn liên tục xuống dòng (1 cảnh = đúng 1 đoạn văn sạch).")
+                     "Dự án: Cú Lừa Gà Rán & Pha Liếc Xéo Huyền Thoại • Chuẩn 2 Cảnh x 10.0s • 100% Giọng Miền Nam",
+                     "Định dạng Tool Batch: Lời thoại tiếng Việt sạch 100%, không nhãn người nói, không chú thích SFX. Mỗi cảnh là đúng 1 đoạn văn liên tục xuống dòng (2 cảnh = đúng 2 đoạn văn sạch).")
 
     dialogue_lines = [
-        "Nguội rồi nè, há miệng to ba đút cho công chúa nhen! Ưm ngon quá ba ơi! Mẹ kì zậy... con thổi nguội gòi mà mẹ ăn hết trơn!"
+        "Nguội rồi nè, há miệng to ba đút cho công chúa nhen! Ưm giòn ngon quá ba ơi!",
+        "Mẹ kì zậy... con thổi nguội gòi mà mẹ ăn hết trơn!"
     ]
     for dl in dialogue_lines:
         add_clean_paragraph(doc, dl, font_name='Segoe UI', font_size=11.5)
@@ -164,20 +145,20 @@ def export_file_04(output_dir):
 
     p_h1 = doc.add_heading(level=2)
     p_h1.add_run("1. Prompt Tạo Ảnh Bìa Thumbnail (9:16)")
-    thumb_prompt = "A hyper-realistic candid family comedy thumbnail photo, 9:16 vertical framing. Close-up on @_Brand_Baby_Lead, super cute 3-year-old Vietnamese toddler girl with chubby rosy dumpling cheeks, sitting at a restaurant dining table, lower lip pushed out in an iconic hilarious dramatic sulk, big dark eyes giving an epic side-eye glare at her smiling father in the background, pearl daisy hairpin in high topknot bun. On the table is a plate of crispy fried chicken. Warm golden restaurant lighting, clean negative space at the top for bold catchy text, masterpiece, 8k resolution, raw photography, zero AI plastic look, zero 3D CGI rendering --ar 9:16 --v 6.1 --style raw"
+    thumb_prompt = "A hilarious viral family thumbnail photo, 9:16 vertical, close-up on @_Brand_Baby_Lead (Bé Hân 3 tuổi) with iconic dramatic sulking pout face, cheeks puffed like steamed dumplings, giving an epic side-eye glare at her smiling parents at the restaurant table, golden fried chicken plate in foreground, bright warm lighting, crisp DSLR depth of field, 8k raw photography, zero plastic AI smoothing --ar 9:16 --v 6.1 --style raw"
     add_clean_paragraph(doc, thumb_prompt)
 
     p_h2 = doc.add_heading(level=2)
     p_h2.add_run("2. Chữ Dán Thumbnail (Overlay Text)")
-    add_clean_paragraph(doc, "CON THỔI NGUỘI MẸ ĂN MẤT! 😭🍗\nCÚ LIẾC XÉO BẤT LỰC! 😡✨\nBA ĐỪNG LỪA CON NỮA MÀ! 😂", font_name='Segoe UI', font_size=11)
+    add_clean_paragraph(doc, "CÚ LỪA GÀ RÁN! 🍗😱\nPHA LIẾC HUYỀN THOẠI! 👀🤣\nDỖI LUÔN KHỎI ĂN! 😤💔", font_name='Segoe UI', font_size=11)
 
     p_h3 = doc.add_heading(level=2)
     p_h3.add_run("3. Tiêu Đề Đa Nền Tảng (A/B Testing Headlines)")
-    add_clean_paragraph(doc, "A: Ba đút gà rán cho mẹ và pha liếc xéo dỗi hờn huyền thoại của Bé Hân 😂🍗 #Shorts\nB: Người ta thổi nguội nãy giờ mà mẹ cắn mất tiêu, nhìn cái mặt dỗi cưng xỉu! 🥺❤️ #TikTokBaby\nC: Khi ba giả vờ đút đồ ăn cho con gái rượu và cái kết bất lực... 🤣 #Reels", font_name='Segoe UI', font_size=11)
+    add_clean_paragraph(doc, "A: Ba lừa đút gà rán cho mẹ và pha liếc xéo huyền thoại của bé Hân 🍗👀 #Shorts\nB: Con thổi cho đã rồi ba đút mẹ ăn, dỗi hờn cả thế giới luôn! 😤🤣 #TikTokFamily\nC: Đừng đùa với công chúa nhỏ khi cô ấy đang đói! 🍗👶 #ReelsViral", font_name='Segoe UI', font_size=11)
 
     p_h4 = doc.add_heading(level=2)
     p_h4.add_run("4. Caption & Hashtag 3 Tầng")
-    add_clean_paragraph(doc, "Con gái cưng ngồi thổi phù phù nãy giờ cho nguội đặng ăn, ai ngờ ba bẻ lái đút cái rụp vô miệng mẹ! Nhìn cái tướng đứng hình rồi liếc xéo ba tóe lửa kìa trời ơi, má bánh bao phồng căng thấy ghét ghê hôn 😂 Cả nhà thả tim dỗ dành bé Hân đi mua đĩa gà rán khác nha! 💖🍗\n\n#Shorts #TikTokBaby #ReelsViral #FamilyHumor #HaiHuocGiaDinh #BeHanDaily #EmBeHaiHuoc #MaBanhBao #LinhMitDaily #EmBeDoiHon #TieuPhamGiaDinh #MeVaBe #ChuyenNhaHan #HanDaily #CuLuaGaRan", font_name='Segoe UI', font_size=10.5)
+    add_clean_paragraph(doc, "Tội nghiệp công chúa nhỏ của ba mẹ ghê chưa! Thổi cho nguội đã đời xong ba quay xe đút mẹ cắn một miếng to đùng! Nhìn cái mặt dỗi với pha liếc xéo mà ba mẹ cười muốn xỉu! Cả nhà có con nhỏ dỗi hờn dễ thương vậy không nè? 🍗👶🤣\n\n#Shorts #TikTokFamily #ReelsViral #HanDaily #LinhMitDaily #BabyFunny #EmBeHaiHuoc #GiaDinhHaiHuoc #CuLuaGaRan #TrendingShorts", font_name='Segoe UI', font_size=10.5)
 
     doc.save(os.path.join(output_dir, "04_METADATA_SEO.docx"))
 
