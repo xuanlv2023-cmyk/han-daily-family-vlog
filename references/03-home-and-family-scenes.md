@@ -1,49 +1,44 @@
 # BỐI CẢNH GIA ĐÌNH & KHÔNG GIAN ĐỜI THƯỜNG (SCENES & SETTINGS)
-## Skill: `han-daily-family-vlog`
+## Skill: `han-daily-family-vlog` • Token Registry: `@_Location_...`
 
-Các bối cảnh quen thuộc, ấm cúng và sang trọng giúp tạo nên cảm giác gần gũi như xem một cuốn nhật ký gia đình thực thụ.
+Tài liệu quy chuẩn các bối cảnh gia đình với hệ thống Token đồng bộ, ánh sáng thực tế và loại bỏ triệt để hiệu ứng 3D hoạt hình nhân tạo.
 
 ---
 
-### 1. PHÒNG KHÁCH CĂN HỘ HIỆN ĐẠI (LIVING ROOM)
-- **Đặc điểm:** Sofa da màu be/kem mềm mại, bàn trà tròn nhỏ, thảm trải sàn lông ngắn, tranh nghệ thuật treo tường, ánh sáng tự nhiên tràn ngập từ cửa ban công lớn.
-- **Phù hợp:** Cảnh ba chải tóc cho con gái, cảnh hai chị em chơi đùa, cảnh dỗi hờn bên ghế sofa.
+### 1. HỆ THỐNG TOKEN BỐI CẢNH ĐỒNG BỘ (LOCATION TOKENS)
+
+Khi viết prompt Keyframe và Video, bắt buộc khai báo Token bối cảnh tương ứng trong thẻ `[ENVIRONMENT & LIGHTING]`:
+
+| Token Bối Cảnh | Tên Không Gian | Đặc Trưng Không Gian & Ánh Sáng Thực Tế |
+| :--- | :--- | :--- |
+| `@_Location_Living_Room` | Phòng khách chung cư hiện đại | Sofa da be, thảm xốp/lông mềm, cửa ban công đón ánh sáng ban ngày tự nhiên dịu nhẹ, đồ chơi trẻ em gọn gàng. |
+| `@_Location_Kitchen_Dining` | Bàn ăn & Đảo bếp gia đình | Đảo bếp đá cẩm thạch trắng, đĩa hoa quả/bánh kẹo tươi ngon, đèn thả ấm áp, ghế ngồi của bé. |
+| `@_Location_Master_Bedroom` | Phòng ngủ bố mẹ & các con | Giường king-size ga gối linen ấm cúng, đèn ngủ ánh vàng dịu, không gian vui đùa trước giờ ngủ. |
+| `@_Location_Family_Car` | Khoang xe ô tô gia đình SUV | Ghế da nâu/đỏ đô sang trọng, ánh sáng tự nhiên qua kính xe, bố mẹ ngồi trước, bé Hân ngồi ghế trẻ em phía sau. |
+
+---
+
+### 2. NGUYÊN TẮC ÁNH SÁNG ĐỜI THƯỜNG (ANTI-CGI LIGHTING)
+
+> **⚠️ BỘ QUY TẮC ÁNH SÁNG GIA ĐÌNH CHÂN THỰC:**
+> 1. **Loại bỏ ánh sáng hoạt hình Pixar:** Cấm dùng `cinematic volumetric rays, glossy 3D lighting, cartoon bloom, unreal engine`. Chúng làm căn nhà trông như cảnh dựng 3D.
+> 2. **Ánh sáng sinh hoạt tự nhiên (Natural Domestic Ambient Light):**
+>    - Ánh sáng ban ngày mềm mại khuếch tán qua rèm voan trắng từ cửa sổ ban công lớn.
+>    - Ánh đèn trần downlight vàng dịu (3000K) ấm cúng vào buổi tối.
+>    - Bóng tiếp đất chân thực dưới sàn nhà (floor contact shadows) của bàn chân bé và các đồ vật/đồ chơi.
+> 3. **Chất cảm biến máy ảnh gia đình:**
+>    - Khóa chất máy ảnh: `shot on Sony A7 IV with 35mm f/1.8 lens, natural dynamic range, true-to-life domestic colors, pristine sensor capture, unretouched real human photography, zero CGI rendering`.
+
+---
+
+### 3. PROMPTS MẪU TỪNG BỐI CẢNH (CAMERA SENSOR CAPTURE)
+
+#### Bối cảnh 1: Phòng khách chung cư (`@_Location_Living_Room`)
 ```text
-bright warm Scandinavian luxury living room, comfortable beige modular sofa, circular wooden coffee table, soft cream area rug, large window with sheer white curtains letting in soft natural daylight, cozy aesthetic
+inside @_Location_Living_Room, a bright warm luxury Scandinavian living room, comfortable beige modular sofa, circular wooden coffee table, soft cream area rug, large window with sheer white curtains letting in soft natural daylight, natural floor contact shadows, cozy domestic family atmosphere, shot on Sony A7 IV with 35mm f/1.8 lens, pristine clean sensor image, zero CGI rendering, zero 3D look
 ```
 
----
-
-### 2. GIAN BẾP BẮC ÂU HIỆN ĐẠI (SCANDINAVIAN KITCHEN & ISLAND)
-- **Đặc điểm:** Đảo bếp ốp đá cẩm thạch trắng, ghế bar gỗ, kệ gia vị và hoa tươi trang trí, đĩa hoa quả hoặc bánh ngọt đặt trên bàn.
-- **Phù hợp:** Cảnh mẹ nấu ăn/gọt hoa quả, con gái cầm điện thoại đến mắng ba, cảnh đòi ăn bánh.
+#### Bối cảnh 2: Gian bếp & Bàn ăn (`@_Location_Kitchen_Dining`)
 ```text
-modern open-concept kitchen with white marble island counter, stylish pendant lights, wooden shelves with pastel ceramics, fresh fruit platter on the counter, bright airy domestic atmosphere
-```
-
----
-
-### 3. PHÒNG NGỦ GIA ĐÌNH ẤM CÚNG (COZY MASTER BEDROOM)
-- **Đặc điểm:** Giường nệm đôi lớn bọc ga gối màu be ấm áp, đèn ngủ đầu giường ánh vàng dịu, cửa sổ nhìn ra ánh đèn thành phố về đêm.
-- **Phù hợp:** Cảnh cả gia đình 4 người nằm trên giường trước khi ngủ, bé Hân tranh giành ba với mẹ.
-```text
-cozy master bedroom at night, large king-size bed with plush fluffy duvet and linen pillows, warm bedside table lamp casting golden glow, city skyline night view through sheer curtains
-```
-
----
-
-### 4. BÊN TRONG XE Ô TÔ GIA ĐÌNH (FAMILY SUV INTERIOR)
-- **Đặc điểm:** Ghế da màu đỏ đô hoặc nâu kem sang trọng, ghế lái và ghế phụ phía trước, khoang ghế sau rộng rãi nơi bé gái và em bé ngồi.
-- **Phù hợp:** Cảnh ba lái xe, mẹ thơm ba và bé gái ghen tị từ hàng ghế sau.
-```text
-interior of a luxury family SUV car, rich burgundy leather seats, soft ambient cabin light, father in driver seat, mother in passenger seat, toddler girl sitting cute in the back center
-```
-
----
-
-### 5. KHU ĐÔ THỊ CAO CẤP / BỜ SUỐI DÃ NGOẠI (OUTDOOR PROMENADE & PICNIC)
-- **Đặc điểm:** Lối đi bộ rợp bóng cây xanh, mặt đường sạch sẽ giữa các tòa nhà hiện đại, hoặc bờ suối đá trong vắt nhìn thấy sỏi đáy nước.
-- **Phù hợp:** Cảnh cả nhà đi dạo phố cuối tuần, cảnh ba mẹ dắt con gái và bế em trai, dã ngoại suối hè.
-```text
-outdoor sunny tree-lined pedestrian avenue in a luxury modern residential complex, dappled sunlight filtering through green leaves, clean paved walkway, beautiful weekend family stroll
+inside @_Location_Kitchen_Dining, a modern open-concept family kitchen with white marble island counter, stylish pendant lights casting warm gentle glow, wooden shelves with pastel ceramics, fresh fruit platter on counter, bright airy domestic atmosphere, true-to-life indoor lighting, zero artificial bloom
 ```

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Script tự động kết xuất trọn bộ 5 File Word (.docx) chuyên dụng cho sản xuất hàng loạt
+Script tự động kết xuất trọn bộ 5 File Word (.docx) chuyên dụng cho sản xuất hàng loạt chuẩn V10
 Skill: han-daily-family-vlog
 Quy chuẩn: 100% văn bản thuần túy (Plain Text Paragraphs), KHÔNG sử dụng Table ở bất kỳ file nào.
-Mục tiêu: Đảm bảo copy-paste 1 chạm siêu tốc vào các AI tools (Midjourney, Flux, Kling, Luma, CapCut).
+Chuẩn Tool Batch: File 01, 02, 03 mỗi cảnh là đúng 1 đoạn văn liên tục không nhãn thừa.
 """
 
 import os
-import sys
 from docx import Document
 from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -19,7 +18,7 @@ def add_styled_title(doc, title_text, subtitle_text, note_text=None):
     run_title.font.name = "Segoe UI"
     run_title.font.size = Pt(17)
     run_title.font.bold = True
-    run_title.font.color.rgb = RGBColor(234, 88, 12) # Warm playful orange
+    run_title.font.color.rgb = RGBColor(245, 158, 11)
     p_title.paragraph_format.space_before = Pt(0)
     p_title.paragraph_format.space_after = Pt(2)
 
@@ -38,22 +37,13 @@ def add_styled_title(doc, title_text, subtitle_text, note_text=None):
         run_note = p_note.add_run(note_text)
         run_note.font.name = "Segoe UI"
         run_note.font.size = Pt(9.5)
-        run_note.font.color.rgb = RGBColor(225, 29, 72)
+        run_note.font.color.rgb = RGBColor(234, 88, 12)
         p_note.paragraph_format.space_after = Pt(16)
     else:
         p_sub.paragraph_format.space_after = Pt(14)
 
-def add_prompt_paragraph(doc, text_content, label=None, font_name="Consolas", font_size=10, is_bold=False):
-    if label:
-        p_label = doc.add_paragraph()
-        run_lbl = p_label.add_run(label)
-        run_lbl.font.name = "Segoe UI"
-        run_lbl.font.size = Pt(10.5)
-        run_lbl.font.bold = True
-        run_lbl.font.color.rgb = RGBColor(234, 88, 12)
-        p_label.paragraph_format.space_before = Pt(8)
-        p_label.paragraph_format.space_after = Pt(2)
-
+def add_clean_paragraph(doc, text_content, font_name="Consolas", font_size=10, is_bold=False):
+    """Thêm đúng 1 đoạn văn liên tục không nhãn thừa cho tool batch"""
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.space_after = Pt(14)
@@ -66,57 +56,78 @@ def add_prompt_paragraph(doc, text_content, label=None, font_name="Consolas", fo
 
 def export_all_docx(project_dir, project_data):
     """
-    Kết xuất 5 file Word theo chuẩn 100% Plain Text Paragraphs không Table
+    Kết xuất trọn bộ 5 File Word (.docx) chuẩn V10 Tool Batch
     """
     export_dir = os.path.join(project_dir, "export_batch")
     os.makedirs(export_dir, exist_ok=True)
 
-    # 1. Kịch bản tổng thể
+    # File 00: Hồ sơ tham chiếu gốc
+    doc0 = Document()
+    add_styled_title(doc0, "HỒ SƠ THAM CHIẾU GỐC (MASTER REFERENCE ASSETS)",
+                     f"Dự án: {project_data.get('title', 'Hân Daily Family Vlog')}",
+                     "⚠️ BƯỚC 0 BẮT BUỘC: Nạp ảnh Character Turnaround làm Image/Character Reference cho Tool AI.")
+    if 'char_sheet' in project_data:
+        p_h = doc0.add_heading(level=2)
+        p_h.add_run("1. Master Character Model Sheets")
+        add_clean_paragraph(doc0, project_data['char_sheet'])
+    if 'loc_sheet' in project_data:
+        p_h = doc0.add_heading(level=2)
+        p_h.add_run("2. Master Location Sheet")
+        add_clean_paragraph(doc0, project_data['loc_sheet'])
+    doc0.save(os.path.join(export_dir, "00_HO_SO_THAM_CHIEU_GOC.docx"))
+
+    # File 01: Prompts tạo ảnh hàng loạt (1 đoạn văn/cảnh)
     doc1 = Document()
-    add_styled_title(doc1, f"KỊCH BẢN TỔNG THỂ: {project_data.get('title')}", project_data.get('subtitle', 'Hân Daily Family Vlog'))
-    for sc in project_data.get('scenes', []):
-        add_prompt_paragraph(doc1, 
-            f"Thời lượng: {sc.get('duration')}\n"
-            f"Bối cảnh & Tình huống diễn xuất: {sc.get('description', '')}\n"
-            f"Góc máy & Chuyển động: {sc.get('camera', '')}\n"
-            f"Lời thoại / Lồng tiếng: {sc.get('dialogue', '')}",
-            label=f"PHÂN CẢNH {sc.get('id')}: {sc.get('name')}",
-            font_name="Segoe UI", font_size=10.5
-        )
-    doc1.save(os.path.join(export_dir, "01_Kich_Ban_Tong_The.docx"))
+    add_styled_title(doc1, "PROMPTS TẠO ẢNH HÀNG LOẠT (BATCH IMAGE PROMPTS)",
+                     f"Dự án: {project_data.get('title', 'Hân Daily Family Vlog')} • Chuẩn 9:16 3D Pixar Animation",
+                     "Định dạng Tool Batch: 100% văn bản thuần túy không nhãn thừa. Mỗi cảnh là đúng 1 đoạn văn liên tục.")
+    for p in project_data.get('image_prompts', []):
+        add_clean_paragraph(doc1, p)
+    doc1.save(os.path.join(export_dir, "01_PROMPTS_ANH_HANG_LOAT.docx"))
 
-    # 2. Batch Prompt Image (Flux / Midjourney)
+    # File 02: Prompts tạo video hàng loạt (1 đoạn văn/cảnh)
     doc2 = Document()
-    add_styled_title(doc2, "PROMPT TẠO ẢNH HÀNG LOẠT (FLUX / MIDJOURNEY)", "Bộ Prompt Keyframe 9:16 chuẩn Real Human DSLR, Cute Toddler Expressions & Family Turnaround", "💡 HƯỚNG DẪN: Copy từng đoạn prompt bên dưới dán trực tiếp vào Midjourney hoặc Flux. Dùng kèm ảnh Character Turnaround tương ứng.")
-    for sc in project_data.get('scenes', []):
-        add_prompt_paragraph(doc2, sc.get('image_prompt', ''), label=f"CẢNH {sc.get('id')} - {sc.get('name')}")
-    doc2.save(os.path.join(export_dir, "02_Prompt_Tao_Anh_Image_Batch.docx"))
+    add_styled_title(doc2, "PROMPTS TẠO VIDEO HÀNG LOẠT (BATCH MEGA PROMPTS)",
+                     f"Dự án: {project_data.get('title', 'Hân Daily Family Vlog')} • Chuẩn Tagged Blocks Bắt Buộc",
+                     "Định dạng Tool Batch: 100% văn bản thuần túy không nhãn thừa. Mỗi cảnh là đúng 1 đoạn văn liên tục không ngắt dòng bên trong.")
+    for vp in project_data.get('video_prompts', []):
+        add_clean_paragraph(doc2, vp)
+    doc2.save(os.path.join(export_dir, "02_PROMPTS_VIDEO_HANG_LOAT.docx"))
 
-    # 3. Batch Prompt Video (Kling / Luma / Hailuo / Wan)
+    # File 03: Prompts voice hàng loạt (1 đoạn văn/cảnh, thuần thoại)
     doc3 = Document()
-    add_styled_title(doc3, "PROMPT TẠO VIDEO CHUYỂN ĐỘNG & DIỄN XUẤT (KLING / LUMA / HAILUO / WAN)", "Bộ Prompt Chuyển Động Biểu Cảm Má Bánh Bao, Cử Chỉ Ngây Ngô & Diễn Xuất Gia Đình", "💡 HƯỚNG DẪN: Upload Keyframe ảnh từ File 02 làm Start Frame (I2V), copy prompt video và thiết lập motion tương ứng.")
-    for sc in project_data.get('scenes', []):
-        content = f"{sc.get('video_prompt', '')}\n\n[Motion Settings]: {sc.get('motion_params', '')}"
-        add_prompt_paragraph(doc3, content, label=f"CẢNH {sc.get('id')} - {sc.get('name')}")
-    doc3.save(os.path.join(export_dir, "03_Prompt_Tao_Video_Motion_Batch.docx"))
+    add_styled_title(doc3, "KỊCH BẢN LỜI THOẠI & ÂM THANH HÀNG LOẠT (BATCH TTS SCRIPTS)",
+                     f"Dự án: {project_data.get('title', 'Hân Daily Family Vlog')}",
+                     "Định dạng Tool Batch: Lời thoại sạch 100%, không nhãn người nói, không chú thích SFX.")
+    for vl in project_data.get('voice_prompts', []):
+        add_clean_paragraph(doc3, vl, font_name="Segoe UI", font_size=11.5)
+    doc3.save(os.path.join(export_dir, "03_PROMPTS_VOICE_HANG_LOAT.docx"))
 
-    # 4. Âm thanh, Thoại Em Bé & SFX Hài Hước
+    # File 04: Metadata SEO
     doc4 = Document()
-    add_styled_title(doc4, "KỊCH BẢN THOẠI EM BÉ, FOLEY & HIỆU ỨNG ÂM THANH HÀI HƯỚNG", "Kịch bản lồng tiếng em bé ngọng nghịu, tiếng cười nắc nẻ, tiếng dỗi hờn và nhạc nền Acoustic/Piano", "💡 HƯỚNG DẪN: Dùng CapCut hoặc Premiere ghép audio voiceover khớp đúng khẩu hình diễn xuất của bé và ba mẹ.")
-    for sc in project_data.get('scenes', []):
-        content = f"Lời thoại nhân vật: {sc.get('dialogue', '')}\nHiệu ứng âm thanh hài (SFX): {sc.get('sfx', '')}\nNhạc nền BGM: {sc.get('bgm', '')}"
-        add_prompt_paragraph(doc4, content, label=f"CẢNH {sc.get('id')} - {sc.get('name')}", font_name="Segoe UI", font_size=10.5)
-    doc4.save(os.path.join(export_dir, "04_Am_Thanh_Voice_BGM.docx"))
+    add_styled_title(doc4, "GÓI TỐI ƯU SEO & ĐĂNG TẢI VIRAL ĐA KÊNH",
+                     f"Dự án: {project_data.get('title', 'Hân Daily Family Vlog')} • Chuẩn Đăng Tải Shorts / TikTok / Reels")
+    seo = project_data.get('seo', {})
+    if 'thumbnail_prompt' in seo:
+        p_h = doc4.add_heading(level=2)
+        p_h.add_run("1. Prompt Tạo Ảnh Bìa Thumbnail (9:16)")
+        add_clean_paragraph(doc4, seo['thumbnail_prompt'])
+    if 'overlay_text' in seo:
+        p_h = doc4.add_heading(level=2)
+        p_h.add_run("2. Chữ Dán Thumbnail (Overlay Text)")
+        add_clean_paragraph(doc4, seo['overlay_text'], font_name="Segoe UI", font_size=11)
+    if 'headlines' in seo:
+        p_h = doc4.add_heading(level=2)
+        p_h.add_run("3. Tiêu Đề Đa Nền Tảng (A/B Testing Headlines)")
+        add_clean_paragraph(doc4, seo['headlines'], font_name="Segoe UI", font_size=11)
+    if 'caption' in seo:
+        p_h = doc4.add_heading(level=2)
+        p_h.add_run("4. Caption & Hashtag 3 Tầng")
+        add_clean_paragraph(doc4, seo['caption'], font_name="Segoe UI", font_size=10.5)
+    doc4.save(os.path.join(export_dir, "04_METADATA_SEO.docx"))
 
-    # 5. Lệnh FFmpeg Ghép Video Tự Động
-    doc5 = Document()
-    add_styled_title(doc5, "LỆNH FFMPEG GHÉP VIDEO TỰ ĐỘNG", "Command line render chuẩn tỷ lệ 9:16 (1080x1920), 60fps mượt mà", "💡 HƯỚNG DẪN: Mở terminal tại thư mục chứa các clip MP4 đã render từ AI, dán lệnh để xuất bản video hoàn chỉnh.")
-    for idx, cmd in enumerate(project_data.get('ffmpeg_commands', []), 1):
-        add_prompt_paragraph(doc5, cmd, label=f"Lệnh {idx}")
-    doc5.save(os.path.join(export_dir, "05_Lenh_FFmpeg_Xuat_Video.docx"))
-
-    print(f"[OK] Da ket xuat thanh cong tron bo 5 file .docx khong co Table tai: {export_dir}")
+    print(f"[OK] Đã xuất thành công trọn bộ 5 file .docx chuẩn Tool Batch tại: {export_dir}")
     return export_dir
 
 if __name__ == "__main__":
-    print("Script export_batch_docx.py cho skill han-daily-family-vlog da san sang.")
+    print("Script export_batch_docx.py cho skill han-daily-family-vlog đã sẵn sàng theo chuẩn V10.")
